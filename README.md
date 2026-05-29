@@ -8,7 +8,7 @@ The project combines **LangGraph workflows**, **Retrieval-Augmented Generation (
 
 ---
 
-# 🌟 Features
+## 🌟 Features
 
 - ✅ Automated claim extraction from articles
 - ✅ Claim-by-claim fact verification
@@ -22,7 +22,7 @@ The project combines **LangGraph workflows**, **Retrieval-Augmented Generation (
 
 ---
 
-# 🧠 Architecture
+## 🧠 Architecture
 
 ```text
 Article Text
@@ -64,7 +64,7 @@ Article Text
 
 ---
 
-# 🧩 Tech Stack
+## 🧩 Tech Stack
 
 ## Backend
 - Python
@@ -92,7 +92,7 @@ Article Text
 
 ---
 
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```bash
 root/
@@ -113,7 +113,7 @@ root/
 
 ---
 
-# ⚙️ Installation & Setup
+## ⚙️ Installation & Setup
 
 ## 1️⃣ Clone Repository
 
