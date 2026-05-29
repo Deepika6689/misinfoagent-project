@@ -189,7 +189,7 @@ http://localhost:8000
 
 ---
 
-# 🚀 How It Works
+## 🚀 How It Works
 
 1. User submits an article
 2. Claims are extracted automatically
@@ -205,7 +205,7 @@ http://localhost:8000
 
 ---
 
-# 🔬 AI Concepts Used
+## 🔬 AI Concepts Used
 
 - LangGraph Workflow Automation
 - Retrieval-Augmented Generation (RAG)
@@ -217,7 +217,7 @@ http://localhost:8000
 
 ---
 
-# 🔮 Future Enhancements
+## 🔮 Future Enhancements
 
 - 🌐 Multi-language support
 - 📄 PDF upload support
@@ -228,7 +228,7 @@ http://localhost:8000
 
 ---
 
-# 👩‍💻 Author
+## 👩‍💻 Author
 
 ## Deepika
 AIML Engineering Student  
@@ -236,13 +236,13 @@ Passionate about AI, NLP, LLMs, and Full Stack Development
 
 ---
 
-# ⭐ Support
+## ⭐ Support
 
 If you like this project, give it a ⭐ on GitHub.
 
 ---
 
-# 🤝 Contributor
+## 🤝 Contributor
 
 - **@sourabhsp23** – Support and contributions to the project
 
