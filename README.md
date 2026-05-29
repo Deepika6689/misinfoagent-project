@@ -1,139 +1,249 @@
-# Misinformation Audit Agent
-### LangGraph + RAG + Finetuned NLI + LangChain Tools
+# 🛡️ Misinformation Audit Agent
 
-Fact-checks any article claim-by-claim, cites real sources, and produces
-a structured credibility report with an overall score.
+### LangGraph + RAG + NLP + Fact Verification System
+
+An AI-powered misinformation detection and fact-checking system that analyzes articles claim-by-claim, retrieves supporting evidence from trusted sources, and generates a structured credibility audit report automatically.
+
+The project combines **LangGraph workflows**, **Retrieval-Augmented Generation (RAG)**, **Natural Language Inference (NLI)**, and **real-time web search** to identify misinformation efficiently.
 
 ---
 
-## Architecture
+# 🌟 Features
 
-```
-Article text
+- ✅ Automated claim extraction from articles
+- ✅ Claim-by-claim fact verification
+- ✅ Contradiction detection within articles
+- ✅ Evidence retrieval using ChromaDB RAG
+- ✅ Real-time web search using Serper API
+- ✅ DeBERTa-v3 NLI classification
+- ✅ Structured credibility audit reports
+- ✅ Local LLM support using Ollama
+- ✅ Interactive animated frontend using GSAP + FastAPI
+
+---
+
+# 🧠 Architecture
+
+```text
+Article Text
      │
      ▼
 ┌─────────────────┐
-│ claim_extractor │  LLM breaks article into atomic verifiable claims
+│ Claim Extractor │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  rag_retriever  │  ChromaDB over PubMed, Snopes, WHO, CDC, Wikipedia
+│ RAG Retriever   │
+│ (ChromaDB)      │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│   web_search    │  Serper (live web) + Wikipedia tool per claim
+│ Web Search      │
+│ (Serper API)    │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  nli_verifier   │  Finetuned DeBERTa: SUPPORTED / REFUTED / NOT ENOUGH INFO
+│ NLI Verifier    │
+│ DeBERTa-v3      │
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│  report_writer  │  Structured markdown audit report + credibility score
+│ Report Generator│
 └────────┬────────┘
          │
          ▼
-┌──────────────────────┐
-│ contradiction_detect │  Flags internal contradictions within the article
-└──────────────────────┘
-         │
-        END
+┌─────────────────┐
+│ Contradiction   │
+│ Detection       │
+└─────────────────┘
 ```
 
 ---
 
-## Setup
+# 🧩 Tech Stack
 
-### 1. Install dependencies
+## Backend
+- Python
+- FastAPI
+- LangGraph
+- LangChain
+
+## AI / NLP
+- DeBERTa-v3 NLI
+- Retrieval-Augmented Generation (RAG)
+- Ollama Local LLMs
+
+## Database & Retrieval
+- ChromaDB
+
+## Frontend
+- HTML
+- CSS
+- JavaScript
+- GSAP Animations
+
+## APIs & Tools
+- Serper API
+- Wikipedia Tool
+
+---
+
+# 📁 Project Structure
+
+```bash
+root/
+│── frontend/                 # Frontend application
+│── static/                   # Static assets
+│── chroma_db/                # ChromaDB vector database
+│── custom_docs/              # Custom documents for RAG
+│── app.py                    # Main app
+│── server.py                 # FastAPI server
+│── graph.py                  # LangGraph workflow
+│── ingest.py                 # RAG ingestion pipeline
+│── finetune.py               # NLI model fine-tuning
+│── run_trace.py              # Workflow tracing
+│── requirements.txt          # Dependencies
+│── Dockerfile                # Docker setup
+└── README.md
+```
+
+---
+
+# ⚙️ Installation & Setup
+
+## 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/Deepika6689/misinfoagent-project.git
+cd misinfoagent-project
+```
+
+---
+
+## 2️⃣ Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+---
+
+## 3️⃣ Activate Environment
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+### macOS/Linux
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+## 4️⃣ Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Set environment variables
-```bash
-export OPENAI_API_KEY="sk-..."        # or use Ollama for local LLM
-export SERPER_API_KEY="..."           # free tier: serper.dev (2500 queries/month)
+---
+
+## 5️⃣ Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+SERPER_API_KEY=your_api_key
+OPENAI_API_KEY=your_api_key
 ```
 
-### 3. Build the RAG corpus (run once)
+---
+
+## 6️⃣ Build the RAG Database
+
 ```bash
 python ingest.py
 ```
-This downloads Wikipedia, WHO/CDC fact sheets, and seeds known misinformation.
-Add your own PDFs to `./custom_docs/` for a richer corpus.
 
-### 4. (Optional) Finetune the NLI model
-```bash
-# Best run on Google Colab free T4 GPU
-python finetune.py
-```
-After training, update `graph.py` line ~100:
-```python
-model="cross-encoder/nli-deberta-v3-base"
-# → model="./nli_finetuned"  (or your HuggingFace Hub checkpoint)
-```
+---
 
-### 5. Run the Animated GSAP UI (FastAPI)
+## 7️⃣ Run the Application
+
 ```bash
 uvicorn server:app --reload
 ```
-Open `http://localhost:8000` to see the new next-level animated UI using GSAP.
 
-*(Optional) If you prefer the old legacy UI, you can still run `streamlit run app.py`*
+Open:
 
-### 6. Stitch MCP Integration
-This project now includes a configured `mcp.json` file at the root of the workspace. This connects the Google Stitch Model Context Protocol server. To use it:
-1. Add your Stitch API Key to `mcp.json`.
-2. Connect it with your preferred AI coding agent (e.g., Claude Code, Cursor, Gemini CLI).
-
-### 7. Or run from Python directly
-```python
-from graph import run_audit
-result = run_audit("Your article text here...")
-print(result["audit_report"])
+```bash
+http://localhost:8000
 ```
 
 ---
 
-## Free tier limits
+# 🚀 How It Works
 
-| Service | Free tier |
-|---|---|
-| Serper | 2,500 queries/month |
-| OpenAI gpt-4o-mini | ~$0.01 per audit |
-| ChromaDB | Unlimited (local) |
-| HuggingFace NLI model | Unlimited (local inference) |
-| Google Colab (finetuning) | Free T4 GPU, ~2hr training |
-
-**Total cost per audit: ~$0.01–0.05**
-
----
-
-## Swapping to a local LLM (zero cost)
-
-```python
-# In graph.py, replace build_llm() with:
-from langchain_community.llms import Ollama
-
-def build_llm():
-    return Ollama(model="llama3")   # ollama pull llama3
-```
+1. User submits an article
+2. Claims are extracted automatically
+3. Relevant evidence is retrieved using:
+   - ChromaDB RAG
+   - Serper web search
+4. DeBERTa-v3 verifies each claim
+5. Claims are classified as:
+   - Supported
+   - Refuted
+   - Not Enough Information
+6. A structured misinformation audit report is generated
 
 ---
 
-## Files
+# 🔬 AI Concepts Used
 
-| File | Purpose |
-|---|---|
-| `graph.py` | Main LangGraph graph — all 6 nodes |
-| `ingest.py` | Build the ChromaDB RAG corpus |
-| `finetune.py` | Finetune NLI verifier on FEVER dataset |
-| `app.py` | Streamlit UI |
-| `requirements.txt` | Dependencies |
-| `custom_docs/` | Drop your own PDFs here for RAG |
-| `chroma_db/` | Auto-created by ingest.py |
-| `nli_finetuned/` | Auto-created by finetune.py |
+- LangGraph Workflow Automation
+- Retrieval-Augmented Generation (RAG)
+- Natural Language Processing (NLP)
+- Natural Language Inference (NLI)
+- AI Agent Systems
+- Vector Databases
+- Local LLM Deployment
+
+---
+
+# 🔮 Future Enhancements
+
+- 🌐 Multi-language support
+- 📄 PDF upload support
+- 📊 Analytics dashboard
+- ☁️ Cloud deployment
+- 🔐 User authentication
+- 📱 Mobile responsiveness
+
+---
+
+# 👩‍💻 Author
+
+## Deepika
+AIML Engineering Student  
+Passionate about AI, NLP, LLMs, and Full Stack Development
+
+---
+
+# ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub.
+
+---
+
+# 🤝 Contributor
+
+- **@sourabhsp23** – Support and contributions to the project
+
+---
